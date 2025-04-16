@@ -35,6 +35,36 @@ This collection helps QA and developers verify the API's behavior for all critic
 - **Extendable** – Easily extend for international numbers, bulk sending, or rate-limiting tests.
 
 ---
+## 📦 Custom Packages Setup
+
+Postman currently **does not support exporting custom packages** directly. To ensure the functionality of this test collection, all custom packages used are included in this repository as standalone JSON files.
+
+### Included Packages
+
+- `messages_language.json` – Contains functions to generate multilingual messages with and without emojis.
+- `assertions.json` – Includes reusable test assertions like `expect202()` and `expectSuccessMessage()`.
+
+### 🧰 How to Use These Packages
+
+1. **Manually Create Packages in Postman**  
+   Postman does not allow importing packages via JSON, so you’ll need to manually create them:
+
+   - Open **Postman** and go to your **Scratch Pad** or desired **workspace**.
+   - In the sidebar, click **“Packages”** > **“+ New Package”** > **JavaScript library**.
+   - Copy the contents of `messages_language.json` or `assertions.json` and paste into the Postman package editor.
+   - Set the package name exactly as follows:
+     - `@bold-water-3449/messages_language`
+     - `@bold-water-3449/assertions`
+
+2. **Save and Publish**  
+   - Save the package. Once it’s in your workspace, Postman will resolve the `pm.require(...)` calls inside the collection automatically.
+
+### ⚠️ Notes
+
+- The Postman collection only contains **references** to these packages (by name and ID), not the actual code.
+- If the package names or IDs are incorrect or not created in your workspace, the scripts will fail with a `require is not defined` or `module not found` error.
+- You can rename the packages, but you must also update the references in the collection’s `"packages"` field.
+
 
 ## 🚀 How to Use
 
