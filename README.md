@@ -53,8 +53,8 @@ Postman currently **does not support exporting custom packages** directly. To en
    - In the sidebar, click **“Packages”** > **“+ New Package”** > **JavaScript library**.
    - Copy the contents of `messages_language.json` or `assertions.json` and paste into the Postman package editor.
    - Set the package name exactly as follows:
-     - `@bold-water-3449/messages_language`
-     - `@bold-water-3449/assertions`
+     - `messages_language`
+     - `assertions`
 
 2. **Save and Publish**  
    - Save the package. Once it’s in your workspace, Postman will resolve the `pm.require(...)` calls inside the collection automatically.
