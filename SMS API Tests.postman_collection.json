@@ -1,0 +1,2376 @@
+{
+	"info": {
+		"_postman_id": "2f1a1f28-e21d-477f-a1b5-f12fe40a4a14",
+		"name": "SMS API Tests",
+		"description": "### 📄 SMS API Testing Collection\n\nThis Postman collection automates testing for an SMS Gateway API. It covers both **positive and negative cases** to ensure robust messaging functionality.\n\n#### ✅ Covered Scenarios:\n\n- Send SMS\n    \n- Send SMS with:\n    \n    - Images (MMS-style)\n        \n    - 1–3 custom fields\n        \n    - Custom `line_id` parameter\n        \n    - Emojis\n        \n    - Languages\n        \n- Negative test cases:\n    \n    - Missing fields (`from`, `to`, `message`)\n        \n    - Invalid token\n        \n    - Invalid custom field types\n        \n    - Non-existing `line_id`\n        \n\n#### 🧠 Why This Matters\n\nThis collection helps QA and developers verify API behavior for all critical messaging flows, ensuring reliable communication and graceful error handling.\n\n#### 🛠️ Features\n\n- Dynamic variables (`{{$randomLoremText}}`, `{{$randomCity}}`, etc.)\n    \n- Environment-driven requests (`api_token`, `from`, `to`)\n    \n- Assertions for HTTP status codes, message contents, and error fields\n    \n- Easily extendable for international numbers, bulk sending, or rate-limiting tests\n    \n\n## 🚀 How to Use\n\n1. Import the collection and environment into Postman.\n    \n2. Set your API base URL and token in the environment.\n    \n3. Run requests manually, or use Collection Runner for all tests.\n    \n4. Review test results and assertions in the “Test Results” tab.\n    \n\n🛡️ _Note: This is a sanitized version of the test suite. Sensitive credentials and URLs have been removed or masked._\n\n👤 _Created by: Heghine Shmavonyan_\n\n🔧 _Made for POST/CON 2025 Community Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10155238",
+		"_collection_link": "https://bold-water-3449.postman.co/workspace/8e1dae4d-8893-4661-87aa-4b6f33320abb/collection/10155238-2f1a1f28-e21d-477f-a1b5-f12fe40a4a14?action=share&source=collection_link&creator=10155238"
+	},
+	"item": [
+		{
+			"name": "Send SMS - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 202', function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"pm.test('Response should be a success message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Message sent.\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{$randomLoremSentences}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Eos molestiae eum rerum sit eligendi ut. Excepturi aut eligendi ex. Et voluptatem omnis ipsam. Commodi exercitationem ratione aspernatur ipsa vero sed qui. Id dolor aut.\"\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Other Language",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 202', function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"pm.test('Response should be a success message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Message sent.\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"api_token\");\r",
+							"\r",
+							"const sentences = {\r",
+							"  es: [\"¡Hola! ¿Cómo estás?\", \"Este es un mensaje de prueba.\"],\r",
+							"  fr: [\"Bonjour! Comment ça va?\", \"Ceci est un message de test.\"],\r",
+							"  ja: [\"こんにちは！お元気ですか？\", \"これはテストメッセージです。\"]\r",
+							"};\r",
+							"\r",
+							"const langs = Object.keys(sentences);\r",
+							"const lang = langs[Math.floor(Math.random() * langs.length)];\r",
+							"\r",
+							"const message = sentences[lang][Math.floor(Math.random() * sentences[lang].length)];\r",
+							"\r",
+							"pm.environment.set(\"randomMultilangSentence\", message);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{randomMultilangSentence}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Illo natus voluptates earum asperiores optio odit esse ad. Qui perspiciatis sint est qui minima eum quis quos. Earum quis sit iste deleniti. Pariatur aut voluptatibus vel occaecati. Sapiente dolores sit voluptas itaque itaque a omnis voluptates natus. Quisquam enim perspiciatis error eligendi et.\"\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Other Language with emojis",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 202', function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"pm.test('Response should be a success message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Message sent.\");",
+							"});",
+							"",
+							"const sentences = {",
+							"  es: [\"¡Hola! ¿Cómo estás? 👋\", \"Este es un mensaje de prueba. 🧪\"],",
+							"  fr: [\"Bonjour! Comment ça va? 🥖\", \"Ceci est un message de test. 🧪\"],",
+							"  ja: [\"こんにちは！お元気ですか？ 🌸\", \"これはテストメッセージです。 🧪\"]",
+							"};",
+							"",
+							"const langs = Object.keys(sentences);",
+							"",
+							"const lang = langs[Math.floor(Math.random() * langs.length)];",
+							"",
+							"const message = sentences[lang][Math.floor(Math.random() * sentences[lang].length)];",
+							"",
+							"pm.environment.set(\"randomMultilangSentenceWithEmojies\", message); ",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{randomMultilangSentenceWithEmojies}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Sit quia a. Doloremque ea asperiores ex eos molestiae ut. Voluptas et voluptas.\"\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS with Message and Image",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 202', function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"pm.test('Response should be a success message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Message sent.\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");\r",
+							"pm.environment.get(\"image_url\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{$randomLoremSentences}}\",\n    \"image_url\": \"{{image_url}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "{{api_token}}",
+							"disabled": true
+						},
+						{
+							"key": "from",
+							"value": "{{from}}",
+							"disabled": true
+						},
+						{
+							"key": "to",
+							"value": "{{to}}",
+							"disabled": true
+						},
+						{
+							"key": "message",
+							"value": "{{message}}",
+							"disabled": true
+						},
+						{
+							"key": "image_url",
+							"value": "{{image_url}}",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Nam minus quaerat animi omnis dolores reprehenderit sed maxime. Tempore quaerat velit ut. Esse error qui ratione nulla ratione dolorem earum.\",\n    \"image_url\": \"https://billboardphilippines.com/wp-content/uploads/2024/07/SB19-THE-FIRST-TAKE-FTR-IMG.jpg\"\n\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "+17472366885",
+									"disabled": true
+								},
+								{
+									"key": "to",
+									"value": "+17472726838",
+									"disabled": true
+								},
+								{
+									"key": "message",
+									"value": "Hello, a SMS from Aloware.1",
+									"disabled": true
+								},
+								{
+									"key": "image_url",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS with image and Custom fields",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 202', function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"pm.test('Response should be a success message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Message sent.\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");\r",
+							"pm.environment.get(\"image_url\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{$randomLoremSentences}}\",\n    \"image_url\": \"{{image_url}}\",\n     \"custom_fields\": { \n        \"Character_QA\": \"{{$randomBankAccountName}}\", \n        \"custom_field_2\": \"{{$randomWeekday}}\", \n        \"custom_field_3\": \"{{$randomCity}}\"  \n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					],
+					"query": [
+						{
+							"key": "api_token",
+							"value": "{{api_token}}",
+							"disabled": true
+						},
+						{
+							"key": "from",
+							"value": "{{from}}",
+							"disabled": true
+						},
+						{
+							"key": "to",
+							"value": "{{to}}",
+							"disabled": true
+						},
+						{
+							"key": "image_url",
+							"value": "{{image_url}}",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Rerum sequi et voluptas et quis fugit. Ullam soluta inventore et aliquam rerum minus dicta excepturi molestiae. Officia quibusdam molestias eaque ducimus unde suscipit omnis. Sed sit laborum pariatur. Rerum voluptas est aspernatur nemo iusto error doloribus dicta est. Quasi expedita quibusdam ratione sed enim atque.\",\n    \"image_url\": \"https://billboardphilippines.com/wp-content/uploads/2024/07/SB19-THE-FIRST-TAKE-FTR-IMG.jpg\",\n     \"custom_fields\": { \n        \"Character_QA\": \"Savings Account\", \n        \"custom_field_2\": \"Wednesday\", \n        \"custom_field_3\": \"San Luis Obispo\"  \n    }\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							],
+							"query": [
+								{
+									"key": "api_token",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "from",
+									"value": "+17472366885",
+									"disabled": true
+								},
+								{
+									"key": "to",
+									"value": "+17472726838",
+									"disabled": true
+								},
+								{
+									"key": "message",
+									"value": "Hello, a SMS from Aloware.1",
+									"disabled": true
+								},
+								{
+									"key": "image_url",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - One Custom field",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 202', function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"pm.test('Response should be a success message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Message sent.\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{$randomLoremText}}\",\n     \"custom_fields\": { \n        \"Character_QA\": \"{{$randomBankAccountName}}\"\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Tempore necessitatibus minus dolor ut non. Est aut id fugiat et vero fuga dicta aliquid. Ea nemo consequatur est eum. Aperiam eum necessitatibus. Quas est eos vitae quia ut nostrum voluptates.\",\n     \"custom_fields\": { \n        \"Character_QA\": \"Money Market Account\"\n    }\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Two Custom field",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 202', function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"pm.test('Response should be a success message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Message sent.\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{$randomLoremText}}\",\n     \"custom_fields\": { \n        \"Character_QA\": \"{{$randomBankAccountName}}\", \n        \"custom_field_2\": \"{{$randomWeekday}}\"\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Id asperiores consequatur rem est dolor consequuntur tempora aliquam.\",\n     \"custom_fields\": { \n        \"Character_QA\": \"Auto Loan Account\", \n        \"custom_field_2\": \"Wednesday\"\n    }\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Three Custom field",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 202', function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"pm.test('Response should be a success message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Message sent.\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{$randomLoremText}}\",\n     \"custom_fields\": { \n        \"Character_QA\": \"{{$randomBankAccountName}}\", \n        \"custom_field_2\": \"{{$randomWeekday}}\", \n        \"custom_field_3\": \"{{$randomCity}}\"  \n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"odio\",\n     \"custom_fields\": { \n        \"Character_QA\": \"Personal Loan Account\", \n        \"custom_field_2\": \"Thursday\", \n        \"custom_field_3\": \"Columbus\"  \n    }\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS with Line - Three Custom field",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 202', function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"pm.test('Response should be a success message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Message sent.\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");\r",
+							"pm.environment.get(\"lineId\");\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"line_id\": {{lineId}},\n    \"to\": \"{{to}}\",\n    \"message\": \"{{$randomLoremText}}\",\n     \"custom_fields\": { \n        \"Character_QA\": \"{{$randomBankAccountName}}\", \n        \"custom_field_2\": \"{{$randomWeekday}}\", \n        \"custom_field_3\": \"{{$randomCity}}\"  \n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"line_id\": 390,\n    \"to\": \"+17472726838\",\n    \"message\": \"dolore\",\n     \"custom_fields\": { \n        \"Character_QA\": \"Money Market Account\", \n        \"custom_field_2\": \"Tuesday\", \n        \"custom_field_3\": \"Tomasburgh\"  \n    }\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS with non existing Line",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 401', function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"pm.test('Response should be a success message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"Authentication failed.\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");\r",
+							"pm.environment.get(\"lineId\");\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"line_id\": 1,\n    \"to\": \"{{to}}\",\n    \"message\": \"{{$randomLoremText}}\",\n\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"line_id\": 1,\n    \"to\": \"+17472726838\",\n    \"message\": \"dolor\",\n\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Empty Custom field",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 202', function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"pm.test('Response should be a success message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Message sent.\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{$randomLoremText}}\",\n     \"custom_fields\": { \n\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Consectetur vitae incidunt qui nihil quia et et dolorum voluptatem.\nRerum hic ut unde ex qui similique sed dolorem molestias.\",\n     \"custom_fields\": { \n\n    }\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Invalid Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 401', function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"pm.test('Response should have authentication error message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql('Authentication failed.');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"invalid_token\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{message}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Authentication Failed",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"invalid_token\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Hello, a SMS from Aloware.1\"\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 401,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"error\": \"Authentication failed.\"}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - invalid Custom field",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 422', function () {",
+							"    pm.response.to.have.status(422);",
+							"});",
+							"pm.test('Response should be a validation error message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"The given data was invalid.\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{$randomLoremText}}\",\n     \"custom_fields\": { \n        \"test\": null\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"qui\",\n     \"custom_fields\": { \n        \"test\": null\n    }\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - invalid Custom field property",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 422', function () {",
+							"    pm.response.to.have.status(422);",
+							"});",
+							"pm.test('Response should contain a validation error for custom_fields.test', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.errors['custom_fields.test'][0]).to.eql(\"The custom_fields.test must be a string.\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{$randomLoremText}}\",\n     \"custom_fields\": { \n        \"test\": 96\n    }\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success Response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Sint harum exercitationem et blanditiis officia accusantium accusantium delectus. Dolorem et in nihil sit autem. Rerum maxime exercitationem consequatur et.\n \rEsse in omnis dolor iure praesentium sit temporibus qui. Voluptates tenetur quia maxime ab explicabo harum architecto qui. Ex cupiditate consequatur quo minima libero laudantium.\n \rOdit dolor quam non maxime aliquam ipsam. Sed commodi cupiditate earum sed et quasi. Libero ab et sunt temporibus optio minima architecto doloribus. Animi asperiores distinctio minus at quas tenetur doloribus. Vitae eveniet mollitia repellat hic nihil maxime totam vel.\",\n     \"custom_fields\": { \n        \"test\": 96\n    }\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"success\": true}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Invalid From",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 422', function () {",
+							"    pm.response.to.have.status(422);",
+							"});",
+							"pm.test('Response should contain invalid from error message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql('The given data was invalid.');",
+							"    pm.expect(jsonData.errors.from[0]).to.eql('The selected from is invalid.');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"invalid_from_number\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{message}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Invalid From Error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"invalid_from_number\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Hello, a SMS from Aloware.1\"\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 422,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"message\": \"The given data was invalid.\", \"errors\": {\"from\": [\"The selected from is invalid.\"]}}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Invalid To",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 422', function () {",
+							"    pm.response.to.have.status(422);",
+							"});",
+							"pm.test('Response should contain invalid to error message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.errors.contact[0]).to.eql('Oops! Looks like we could not find nor create a contact to send this message to');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"invalid_to_number\",\n    \"message\": \"{{message}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Invalid To Error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"invalid_to_number\",\n    \"message\": \"Hello, a SMS from Aloware.1\"\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 422,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"errors\": {\"contact\": [\"Oops! Looks like we could not find nor create a contact to send this message to\"]}}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Missing Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 401', function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"pm.test('Response should have authentication error message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql('Authentication failed.');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{message}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Authentication Failed",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Hello, a SMS from Aloware.1\"\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 401,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"error\": \"Authentication failed.\"}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Send SMS - Missing  required field : From",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 422', function () {",
+							"    pm.response.to.have.status(422);",
+							"});",
+							"pm.test('Response should contain missing from error message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.errors.contact[0]).to.eql('Oops! Looks like you forgot to add either from or line_id property');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"to\": \"{{to}}\",\n    \"message\": \"{{message}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Missing From Error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"to\": \"+17472726838\",\n    \"message\": \"Hello, a SMS from Aloware.1\"\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 400,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"errors\": {\"contact\": [\"Oops! Looks like you forgot to add either from or line_id property\"]}}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Missing  required field : Message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 422', function () {",
+							"    pm.response.to.have.status(422);",
+							"});",
+							"pm.test('Response should contain invalid data error message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql('The given data was invalid.');",
+							"    pm.expect(jsonData.errors.message[0]).to.eql('The message field is required.');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"to\": \"{{to}}\"\n}"
+				},
+				"url": {
+					"raw": "/api/v1/webhook/sms-gateway/send",
+					"protocol": "https",
+					"host": [
+						"app",
+						"alodev",
+						"org"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Invalid Data Error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"to\": \"+17472726838\"\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 422,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"message\": \"The given data was invalid.\", \"errors\": {\"message\": [\"The message field is required.\"], \"from\": [\"The selected from is invalid.\"]}}"
+				}
+			]
+		},
+		{
+			"name": "Send SMS - Missing  required field : To",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 422', function () {",
+							"    pm.response.to.have.status(422);",
+							"});",
+							"pm.test('Response should contain invalid data error message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql('The given data was invalid.');",
+							"    pm.expect(jsonData.errors.to[0]).to.eql('The to field is required.');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"from\");\r",
+							"pm.environment.get(\"to\");\r",
+							"pm.environment.get(\"message\");\r",
+							"pm.environment.get(\"api_token\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"api_token\": \"{{api_token}}\",\n    \"from\": \"{{from}}\",\n    \"message\": \"{{message}}\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/webhook/sms-gateway/send",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"webhook",
+						"sms-gateway",
+						"send"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Invalid Data Error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_token\": \"\",\n    \"from\": \"+17472366885\",\n    \"message\": \"Hello, a SMS from Aloware.1\"\n}"
+						},
+						"url": {
+							"raw": "/api/v1/webhook/sms-gateway/send",
+							"protocol": "https",
+							"host": [
+								"app",
+								"alodev",
+								"org"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhook",
+								"sms-gateway",
+								"send"
+							]
+						}
+					},
+					"code": 422,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\"message\": \"The given data was invalid.\", \"errors\": {\"from\": [\"The selected from is invalid.\"], \"to\": [\"The to field is required.\"]}}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "api_token",
+			"value": ""
+		},
+		{
+			"key": "from",
+			"value": "+18552562001"
+		},
+		{
+			"key": "to",
+			"value": "+18181234567"
+		},
+		{
+			"key": "message",
+			"value": "Hello, a SMS from Aloware."
+		},
+		{
+			"key": "lineId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "image_url",
+			"value": "https://billboardphilippines.com/wp-content/uploads/2024/07/SB19-THE-FIRST-TAKE-FTR-IMG.jpg",
+			"type": "string"
+		}
+	]
+}
